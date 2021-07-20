@@ -1,7 +1,14 @@
 import './App.css';
-
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import WelcomeScreen from './Components/WelcomeScreen';
 function App() {
-    return <div className="App">Hello movie quizz</div>;
+    return (
+        <Router>
+            <Switch>
+                <Route path="/" component={WelcomeScreen} />
+            </Switch>
+        </Router>
+    );
 }
 
 export default App;
