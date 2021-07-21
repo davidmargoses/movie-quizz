@@ -1,5 +1,5 @@
 import '../styles/QuestionScreen.style.css';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import series from '../helpers/questionsData';
 
@@ -9,9 +9,17 @@ const QuestionScreen = () => {
     const startIndex = 0;
     const stopIndex = questionsData.length - 1;
 
+    const path_base_url = 'https://image.tmdb.org/t/p/original';
+
     const [score, setScore] = useState(0);
     const [indexQuestion, setIndexQuestion] = useState(startIndex);
     const [disableButton, setDisableButton] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
+    const [paths, setPaths] = useState({});
+
+    useEffect(() => {
+        getPaths();
+    }, [indexQuestion]);
 
     const getActor = () => {
         return questionsData[indexQuestion].people;
@@ -39,6 +47,18 @@ const QuestionScreen = () => {
         }
     };
 
+    const getPaths = async () => {
+        const body = {
+            movie: getMovie(),
+            people: getActor(),
+        };
+
+        const response = await axios.post('http://localhost:3001/images', body);
+
+        setPaths(response.data);
+        setIsLoading(false);
+    };
+
     const questionContainer = () => {
         return (
             <div className="question">
@@ -49,8 +69,12 @@ const QuestionScreen = () => {
                         </span>
                     </div>
                     <div className="image-container">
-                        <span>IMAGE Movie</span>
-                        <span>IMAGE Actor</span>
+                        <div>
+                            <img src={`${path_base_url}${paths.people_path}`} alt="Actor" />
+                        </div>
+                        <div>
+                            <img src={`${path_base_url}${paths.movie_path}`} alt="Movie" />
+                        </div>
                     </div>
                     <div>
                         <button onClick={(e) => sendAnswer(false)} disabled={disableButton}>
@@ -72,7 +96,7 @@ const QuestionScreen = () => {
                     <h2>MOVIE-QUIZ</h2>
                     <h3>SCORE : {score}</h3>
                 </div>
-                <div>{questionContainer()}</div>
+                {!isLoading ? <div>{questionContainer()}</div> : null}
             </div>
         </div>
     );
