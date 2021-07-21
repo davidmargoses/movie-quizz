@@ -4,6 +4,7 @@ import axios from 'axios';
 import series from '../helpers/questionsData';
 import { useHistory } from 'react-router-dom';
 import ScoreContext from '../Context/Score/ScoreContext';
+import Cookies from 'js-cookie';
 
 const QuestionScreen = () => {
     const { highscore, saveNewScore } = useContext(ScoreContext);
@@ -20,7 +21,7 @@ const QuestionScreen = () => {
     const [disableButton, setDisableButton] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
     const [paths, setPaths] = useState({});
-    const [seconds, setSeconds] = useState(60);
+    const [seconds, setSeconds] = useState(5);
 
     useEffect(() => {
         getPaths();
@@ -73,6 +74,7 @@ const QuestionScreen = () => {
 
     const saveHighscore = async () => {
         await saveNewScore(score);
+        Cookies.set('userHighscore', score);
         history.push('/gameover', { score });
     };
 

@@ -1,14 +1,25 @@
 import '../styles/WelcomeScreen.style.css';
-import React, { useContext } from 'react';
+import React, { useEffect, useContext } from 'react';
 import { useHistory } from 'react-router-dom';
 import ScoreContext from '../Context/Score/ScoreContext';
+import Cookies from 'js-cookie';
 
 const WelcomeScreen = () => {
-    const { highscore } = useContext(ScoreContext);
+    const { highscore, saveNewScore } = useContext(ScoreContext);
     const history = useHistory();
     const startButton = () => {
         history.push('/quiz');
     };
+
+    useEffect(() => {
+        getHighscoreFromCookie();
+    }, []);
+
+    const getHighscoreFromCookie = () => {
+        const highscoreFromCookie = Cookies.get('userHighscore');
+        if (highscoreFromCookie) saveNewScore(parseInt(highscoreFromCookie));
+    };
+
     return (
         <div className="main-container">
             <div>
