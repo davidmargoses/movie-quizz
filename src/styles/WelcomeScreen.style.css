@@ -1,7 +1,7 @@
 .main-container {
     display: flex;
     flex: 1;
-    background-image: url('../assets/images//Netflix-Background.jpg');
+    background-image: url('../assets/images/background.jpg');
 }
 .main-container > div:first-child {
     display: flex;

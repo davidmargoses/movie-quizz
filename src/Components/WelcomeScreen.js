@@ -1,7 +1,12 @@
 import '../styles/WelcomeScreen.style.css';
 import React from 'react';
+import { useHistory } from 'react-router-dom';
 
 const WelcomeScreen = () => {
+    const history = useHistory();
+    const startButton = () => {
+        history.push('/quiz');
+    };
     return (
         <div className="main-container">
             <div>
@@ -16,7 +21,7 @@ const WelcomeScreen = () => {
                         <h3>Answer as many as you can in the allowed time !</h3>
                         <h3>Good luck !</h3>
                     </div>
-                    <button>Start</button>
+                    <button onClick={startButton}>Start</button>
                 </div>
             </div>
         </div>
