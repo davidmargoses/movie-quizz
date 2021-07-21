@@ -1,10 +1,12 @@
 import '../styles/QuestionScreen.style.css';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 import series from '../helpers/questionsData';
 import { useHistory } from 'react-router-dom';
+import ScoreContext from '../Context/Score/ScoreContext';
 
 const QuestionScreen = () => {
+    const { highscore, saveNewScore } = useContext(ScoreContext);
     const history = useHistory();
     const seriesNumber = Math.floor(Math.random() * series.length);
     const questionsData = series[seriesNumber].questions;
@@ -26,7 +28,9 @@ const QuestionScreen = () => {
 
     useEffect(() => {
         if (seconds > 0) setTimeout(() => setSeconds(seconds - 1), 1000);
-        else history.push('/gameover', { score });
+        else {
+            score > highscore ? saveHighscore() : history.push('/gameover', { score });
+        }
     });
 
     const getActor = () => {
@@ -67,6 +71,11 @@ const QuestionScreen = () => {
         setIsLoading(false);
     };
 
+    const saveHighscore = async () => {
+        await saveNewScore(score);
+        history.push('/gameover', { score });
+    };
+
     const questionContainer = () => {
         return (
             <div className="question">
@@ -103,7 +112,10 @@ const QuestionScreen = () => {
                 <div>
                     <h2>MOVIE-QUIZ</h2>
                     <h3>TIME REMAINING : {seconds === 60 ? '1:00' : seconds}</h3>
-                    <h3>SCORE : {score}</h3>
+                    <div>
+                        <h3>SCORE : {score}</h3>
+                        <h3>HIGHSCORE : {highscore}</h3>
+                    </div>
                 </div>
                 {!isLoading ? <div>{questionContainer()}</div> : null}
             </div>

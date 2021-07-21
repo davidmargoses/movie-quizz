@@ -1,8 +1,10 @@
 import '../styles/WelcomeScreen.style.css';
-import React from 'react';
+import React, { useContext } from 'react';
 import { useHistory } from 'react-router-dom';
+import ScoreContext from '../Context/Score/ScoreContext';
 
 const WelcomeScreen = () => {
+    const { highscore } = useContext(ScoreContext);
     const history = useHistory();
     const startButton = () => {
         history.push('/quiz');
@@ -12,7 +14,7 @@ const WelcomeScreen = () => {
             <div>
                 <div>
                     <h2>MOVIE-QUIZ</h2>
-                    <h3>HIGHSCORE : 0</h3>
+                    <h3>HIGHSCORE : {highscore}</h3>
                 </div>
                 <div>
                     <h1>Welcome to the quizz !</h1>
